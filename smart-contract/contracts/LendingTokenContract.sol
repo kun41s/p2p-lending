@@ -11,7 +11,7 @@ contract LendingTokenContract is ERC20Interface {
 
     mapping (address => uint256) private tokenBalances;
     mapping (address => mapping(address => uint256)) public allowed;
-    // TODO: do this
+
     constructor(
         uint256 _initialAmount,
         string memory _tokenName,
@@ -96,7 +96,7 @@ contract LendingTokenContract is ERC20Interface {
     /**
      * @param _owner The address of the account owning tokens
      * @param _spender The address of the account able to transfer tokens
-     * @return remaining Amount of remaining tokens allowed to spen
+     * @return remaining Amount of remaining tokens allowed to spent
      */
     function allowance(address _owner, address _spender) public override view returns (uint256 remaining) {
         return allowed[_owner][_spender];
