@@ -1,0 +1,80 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+    "txHash": "0x7dc648a59e0376eaa9838c7578755cc93c4fc3c44e318334b7dbd036d460002d"
+  },
+  "proxies": [
+    {
+      "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      "txHash": "0xff7374803bd05b14e8e109eead8418777967fbbdbf40730187befd9f5abac894",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "7ee1064cbace843535c761f8d41a1c2941752d46ec85af8b6e0c658d5ba3889c": {
+      "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "txHash": "0x79624272e58cb251216a5b59547722469095db2c1bd82736157ee1237399be7e",
+      "layout": {
+        "solcVersion": "0.8.17",
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "label": "flaggingThreshold",
+            "offset": 2,
+            "slot": "0",
+            "type": "t_uint16",
+            "contract": "Governance",
+            "src": "contracts/Governance.sol:13"
+          },
+          {
+            "label": "currentFlags",
+            "offset": 4,
+            "slot": "0",
+            "type": "t_uint16",
+            "contract": "Governance",
+            "src": "contracts/Governance.sol:14"
+          },
+          {
+            "label": "isPlatformEnabled",
+            "offset": 6,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Governance",
+            "src": "contracts/Governance.sol:15"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    }
+  }
+}

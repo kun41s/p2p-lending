@@ -9,8 +9,8 @@ contract LendingTokenContract is ERC20Interface {
     uint8 public decimals;
     address public owner;
 
-    mapping (address => uint256) private tokenBalances;
-    mapping (address => mapping(address => uint256)) public allowed;
+    mapping(address => uint256) private tokenBalances;
+    mapping(address => mapping(address => uint256)) public allowed;
 
     constructor(
         uint256 _initialAmount,
@@ -32,7 +32,10 @@ contract LendingTokenContract is ERC20Interface {
      * @param _value The amount of token to be transferred
      * @return success wheater the transfer was successful or not
      */
-    function transfer(address _to, uint256 _value) public override returns (bool success) {
+    function transfer(
+        address _to,
+        uint256 _value
+    ) public override returns (bool success) {
         require(tokenBalances[msg.sender] >= _value, "insufficient funds");
 
         // Transfer Amount
@@ -48,7 +51,9 @@ contract LendingTokenContract is ERC20Interface {
      * @param _owner The address from which the balance will be retrived
      * @return balance The balance
      */
-    function balanceOf(address _owner) public override view returns (uint256 balance) {
+    function balanceOf(
+        address _owner
+    ) public view override returns (uint256 balance) {
         return tokenBalances[_owner];
     }
 
@@ -59,7 +64,11 @@ contract LendingTokenContract is ERC20Interface {
      * @param _value The amount of the token to be transferred
      * @return success Whether the transfer was successful or not
      */
-    function transferFrom(address _from, address _to, uint256 _value) public override returns (bool success) {
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _value
+    ) public override returns (bool success) {
         // Check Balance
         require(allowance(_from, msg.sender) >= _value, "insufficient balance");
         require(tokenBalances[_from] >= _value, "invalid transfer amount");
@@ -81,7 +90,10 @@ contract LendingTokenContract is ERC20Interface {
      * @param _value The amount of tokens to be approved for transfer
      * @return success Whether the approval was successful or not
      */
-    function approve(address _spender, uint256 _value) public override returns (bool success) {
+    function approve(
+        address _spender,
+        uint256 _value
+    ) public override returns (bool success) {
         // Check approval
         require(balanceOf(msg.sender) >= _value, "insufficient balance");
 
@@ -98,7 +110,10 @@ contract LendingTokenContract is ERC20Interface {
      * @param _spender The address of the account able to transfer tokens
      * @return remaining Amount of remaining tokens allowed to spent
      */
-    function allowance(address _owner, address _spender) public override view returns (uint256 remaining) {
+    function allowance(
+        address _owner,
+        address _spender
+    ) public view override returns (uint256 remaining) {
         return allowed[_owner][_spender];
     }
 }

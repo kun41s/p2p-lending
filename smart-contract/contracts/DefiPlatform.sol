@@ -11,8 +11,7 @@ import "./Governance.sol";
  *      This contract is a wrapper for triggering existing functions in other logic contracts already deployed
  * @dev Not Upgradable
  */
-contract DefiPlatform is RequestFactory{
-
+contract DefiPlatform is RequestFactory {
     // Events
     event LoanAsked();
     event LoanGiven();
@@ -22,14 +21,14 @@ contract DefiPlatform is RequestFactory{
 
     // State Mapping
     address[] private lendingRequests;
-    mapping (address => uint256) private requestIndex;
-    mapping (address => uint256) private userRequestCount;
-    mapping (address => bool) private validRequest;
+    mapping(address => uint256) private requestIndex;
+    mapping(address => uint256) private userRequestCount;
+    mapping(address => bool) private validRequest;
 
     // State Variable
     address private governance;
 
-    constructor(address _governance){
+    constructor(address _governance) {
         governance = _governance;
     }
 
@@ -39,18 +38,32 @@ contract DefiPlatform is RequestFactory{
      * @param _paybackAmount the amount you are willing to pay back - has to be greater than _amount
      * @param _purpose the reason you want to borrow ether
      */
-    function ask(uint256 _amount, uint256 _paybackAmount, string memory _purpose, address payable _token, uint256 _collateralCollectionTimeStamp) external payable returns(bool success) {
+    function ask(
+        uint256 _amount,
+        uint256 _paybackAmount,
+        string memory _purpose,
+        address payable _token,
+        uint256 _collateralCollectionTimeStamp
+    ) external payable returns (bool success) {
         // Get if valid
         bool isPlatformEnabled = Governance(governance).isPlatformEnabled();
         require(isPlatformEnabled, "New Loan Requests are currently disabled");
 
         // validate the input parameters
-        require(_amount > 0, "Amount of tokens requested should be greater than 0");
-        require(_paybackAmount > _amount, "Payback amount should be greater than requested amount");
+        require(
+            _amount > 0,
+            "Amount of tokens requested should be greater than 0"
+        );
+        require(
+            _paybackAmount > _amount,
+            "Payback amount should be greater than requested amount"
+        );
 
         // Check if collateral is being deposited in ethers
-        require(msg.value > 0, "Some ether collateral must be included in your ask request");
-
+        require(
+            msg.value > 0,
+            "Some ether collateral must be included in your ask request"
+        );
 
         // Create new lendingRequest contract
         address payable requestContract = createLendingRequest(
@@ -83,12 +96,18 @@ contract DefiPlatform is RequestFactory{
      * @notice The amount of tokens will be transferred from your account to askers account. You must have already given allowance to this lendingRequest contract to transfer on your behalf.
      * @param _requestContractAddress the address of the lendingRequest contract you want to execute and lend tokens to
      */
-    function lend(address payable _requestContractAddress) external returns(bool result) {
-
+    function lend(
+        address payable _requestContractAddress
+    ) external returns (bool result) {
         // Check is there is a valid lending contract at that address
-        require(validRequest[_requestContractAddress], "Invalid Request Contract");
+        require(
+            validRequest[_requestContractAddress],
+            "Invalid Request Contract"
+        );
 
-        bool success = LendingRequest(_requestContractAddress).lend(payable(msg.sender));
+        bool success = LendingRequest(_requestContractAddress).lend(
+            payable(msg.sender)
+        );
         require(success, "Lending failed");
 
         // Emit Event
@@ -101,12 +120,18 @@ contract DefiPlatform is RequestFactory{
      * @notice payback the loaned tokens to lender
      * @param _requestContractAddress the address of the lendingRequest contract you want to payback debt of
      */
-    function payback(address payable _requestContractAddress) external returns(bool result) {
-
+    function payback(
+        address payable _requestContractAddress
+    ) external returns (bool result) {
         // Checks
-        require(validRequest[_requestContractAddress], "Invalid Request Contract");
+        require(
+            validRequest[_requestContractAddress],
+            "Invalid Request Contract"
+        );
 
-        bool success = LendingRequest(_requestContractAddress).payback(payable(msg.sender));
+        bool success = LendingRequest(_requestContractAddress).payback(
+            payable(msg.sender)
+        );
         require(success, "Payback failed");
 
         // Emit Event
@@ -119,12 +144,18 @@ contract DefiPlatform is RequestFactory{
      * @notice cancels the loan request
      * @param _requestContractAddress the address of the request to cancel
      */
-    function cancelRequest(address payable _requestContractAddress) external returns(bool result) {
-
+    function cancelRequest(
+        address payable _requestContractAddress
+    ) external returns (bool result) {
         // validate input
-        require(validRequest[_requestContractAddress], "Invalid Request Contract");
+        require(
+            validRequest[_requestContractAddress],
+            "Invalid Request Contract"
+        );
 
-        bool success = LendingRequest(_requestContractAddress).cancelRequest(msg.sender);
+        bool success = LendingRequest(_requestContractAddress).cancelRequest(
+            msg.sender
+        );
         require(success, "cancelRequest failed");
 
         // Remove Request
@@ -140,8 +171,10 @@ contract DefiPlatform is RequestFactory{
      * @param _requestContractAddress the lendingRequest contract that will be removed
      * @param _asker address of the asker cancelling this request
      */
-    function removeRequest(address _requestContractAddress, address _asker) private {
-
+    function removeRequest(
+        address _requestContractAddress,
+        address _asker
+    ) private {
         // update number of requests for asker
         userRequestCount[_asker]--;
 
@@ -161,15 +194,44 @@ contract DefiPlatform is RequestFactory{
         validRequest[_requestContractAddress] = false;
     }
 
-    function getRequestParameters(address payable _requestContractAddress) external view returns (address asker, address lender, uint256 askAmount, uint256 paybackAmount,string memory purpose) {
-        (asker, lender, askAmount, paybackAmount, purpose) = LendingRequest(_requestContractAddress).getRequestParameters();
+    function getRequestParameters(
+        address payable _requestContractAddress
+    )
+        external
+        view
+        returns (
+            address asker,
+            address lender,
+            uint256 askAmount,
+            uint256 paybackAmount,
+            string memory purpose
+        )
+    {
+        (asker, lender, askAmount, paybackAmount, purpose) = LendingRequest(
+            _requestContractAddress
+        ).getRequestParameters();
     }
 
-    function getRequestState(address payable _requestContractAddress) external view returns (bool moneyLent, bool debtSettled, uint256 collateral, bool collateralCollected, uint256 collateralCollectionTimeStamp, uint256 currentTimeStamp) {
+    function getRequestState(
+        address payable _requestContractAddress
+    )
+        external
+        view
+        returns (
+            bool moneyLent,
+            bool debtSettled,
+            uint256 collateral,
+            bool collateralCollected,
+            uint256 collateralCollectionTimeStamp,
+            uint256 currentTimeStamp
+        )
+    {
         return LendingRequest(_requestContractAddress).getRequestState();
     }
 
-    function getCollateralBalance(address _requestContractAddress) external view returns(uint256) {
+    function getCollateralBalance(
+        address _requestContractAddress
+    ) external view returns (uint256) {
         return address(_requestContractAddress).balance;
     }
 
@@ -177,7 +239,7 @@ contract DefiPlatform is RequestFactory{
      * @notice gets a list of all available lending requests created on this platform
      * @return all lendingRequests
      */
-    function getRequests() external view returns(address[] memory) {
+    function getRequests() external view returns (address[] memory) {
         return lendingRequests;
     }
 }

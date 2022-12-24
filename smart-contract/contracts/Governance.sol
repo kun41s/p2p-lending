@@ -10,7 +10,6 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
  * @dev TODO: Make Upgradable
  */
 contract Governance is Initializable {
-
     uint16 flaggingThreshold;
     uint16 currentFlags;
     bool public isPlatformEnabled;
@@ -22,40 +21,37 @@ contract Governance is Initializable {
     }
 
     // TODO: Add modifier to control who can access this function
-    function flag() external returns(bool _success){
-
+    function flag() external returns (bool _success) {
         // Increment
         currentFlags += 1;
 
         // Check
-        if (currentFlags > flaggingThreshold){
+        if (currentFlags > flaggingThreshold) {
             isPlatformEnabled = false;
             currentFlags = 0;
         }
 
         return true;
-
     }
 
-    function enableFlag() external returns(bool _success){
-
+    function enableFlag() external returns (bool _success) {
         // Increment
         currentFlags += 1;
 
         // Check
-        if (currentFlags > flaggingThreshold){
+        if (currentFlags > flaggingThreshold) {
             isPlatformEnabled = true;
             currentFlags = 0;
         }
 
         return true;
-
     }
 
     // TODO: Add modifier to control who can access this function
-    function changePlatformState(bool newState) external returns(bool _success){
+    function changePlatformState(
+        bool newState
+    ) external returns (bool _success) {
         isPlatformEnabled = newState;
         return true;
     }
-
 }
